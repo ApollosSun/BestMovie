@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +35,8 @@ public class FragmentList extends Fragment{
     private ArrayAdapter<String> mListAdapter;
     private final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
+    private FilmAdapter mFilmAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,10 +49,13 @@ public class FragmentList extends Fragment{
                 R.id.list_text_item,
                 new ArrayList<String>()
         );
-        mListAdapter.add("This is an example");
+
+        mFilmAdapter = new FilmAdapter(getActivity(), new ArrayList<Film>());
+        Film newFilm = new Film("5", "Titile", "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", "none", "13.05.18");
+        mFilmAdapter.add(newFilm);
 
         ListView listView = rootView.findViewById(R.id.listview_item);
-        listView.setAdapter(mListAdapter);
+        listView.setAdapter(mFilmAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
