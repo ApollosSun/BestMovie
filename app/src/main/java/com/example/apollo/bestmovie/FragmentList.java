@@ -176,6 +176,7 @@ public class FragmentList extends Fragment{
                     return null;
                 }
                 dataMoviesJsonStr = buffer.toString();
+
                 //Log.v(LOG_TAG, "Data Movies Json Str: " + dataMoviesJsonStr);
 
             } catch (IOException e){
