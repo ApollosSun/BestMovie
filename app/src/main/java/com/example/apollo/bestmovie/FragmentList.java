@@ -32,10 +32,11 @@ import java.util.ArrayList;
 
 public class FragmentList extends Fragment{
 
-    private ArrayAdapter<String> mListAdapter;
+    //private ArrayAdapter<String> mListAdapter;
     private final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
     private FilmAdapter mFilmAdapter;
+    private Film film;
 
     @Nullable
     @Override
@@ -43,25 +44,25 @@ public class FragmentList extends Fragment{
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mListAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.list_item,
-                R.id.list_text_item,
-                new ArrayList<String>()
-        );
+//        mListAdapter = new ArrayAdapter<String>(
+//                getActivity(),
+//                R.layout.list_item,
+//                R.id.list_text_item,
+//                new ArrayList<String>()
+//        );
 
         mFilmAdapter = new FilmAdapter(getActivity(), new ArrayList<Film>());
-        Film newFilm = new Film("5", "Titile", "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", "none", "13.05.18");
-        mFilmAdapter.add(newFilm);
-
         ListView listView = rootView.findViewById(R.id.listview_item);
         listView.setAdapter(mFilmAdapter);
+
+        //TODO implement intent
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                film = mFilmAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, mListAdapter.getItem(position));
+                        .putExtra("Film", film);
                 startActivity(intent);
             }
         });
@@ -153,7 +154,6 @@ public class FragmentList extends Fragment{
                 final String APP_ID_PARAM = "api_key";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                        //.appendQueryParameter(APP_ID_PARAM, new Keys().getAPI())
                         .appendQueryParameter(APP_ID_PARAM, Keys.MOVIE_KEY_API)
                         .build();
 
@@ -211,9 +211,10 @@ public class FragmentList extends Fragment{
         @Override
         protected void onPostExecute(String[][] result) {
             if(result != null){
-                mListAdapter.clear();
+                mFilmAdapter.clear();
                 for(String[] s:result){
-                    mListAdapter.add(s[1] + " Rating: " +s[0]);
+                    film = new Film (s[0], s[1], s[2], s[3], s[4]);
+                    mFilmAdapter.add(film);
                 }
 
             }
